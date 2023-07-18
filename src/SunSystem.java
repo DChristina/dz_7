@@ -1,4 +1,3 @@
-import java.util.Optional;
 
 public enum SunSystem {
     Mercury(0, 50,2440,null,"Venus"),
