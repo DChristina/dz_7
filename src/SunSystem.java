@@ -1,45 +1,44 @@
 
 public enum SunSystem {
-    Mercury(0, 50,2440,null,"Venus"),
-    Venus(1, 42,6052,Mercury,"Earth"),
-    Earth(2,78,6371,Venus,"Mars"),
-    Mars(3,550,3390,Earth,"Jupiter"),
-    Jupiter(4,651,69911,Mars,"Saturn"),
-    Saturn(5,1446,58232,Jupiter,"Uranus"),
-    Uranus(6,1622,25362,Saturn,"Neptune"),
-    Neptune(7,0,15299,Uranus,null);
+    Mercury( 50,2440,null),
+    Venus( 42,6052,Mercury),
+    Earth(78,6371,Venus),
+    Mars(550,3390,Earth),
+    Jupiter(651,69911,Mars),
+    Saturn(1446,58232,Jupiter),
+    Uranus(61622,25362,Saturn),
+    Neptune(0,15299,Uranus);
 
-    private final int orderNumber;
-    private final int distanceToNextPlanet;
-    private final int radiusOfPlanet;
-    private final int distanceToSun;
-    private final SunSystem previousPlanet;
-    private final String nextPlanet;
-
-
-    SunSystem(int orderNumber, int distanceToNextPlanet, int radiusOfPlanet, SunSystem previousPlanet,String nextPlanet ){
+    final int orderNumber;
+    final int distanceToNextPlanet;
+    final int radiusOfPlanet;
+    final int distanceToSun;
+    final SunSystem previousPlanet;
+    private SunSystem nextPlanet;
 
 
-        this.orderNumber = orderNumber;
+    SunSystem( int distanceToNextPlanet, int radiusOfPlanet, SunSystem previousPlanet){
+
         this.distanceToNextPlanet = distanceToNextPlanet;
         this.radiusOfPlanet = radiusOfPlanet;
-        this.previousPlanet = previousPlanet;
-        this.nextPlanet = nextPlanet;
-
-
         int distanceFromSunToFirstPlanet = 58;
 
-        if (orderNumber==0){
+        if (previousPlanet == null){
+            this.orderNumber = 1;
             this.distanceToSun = distanceFromSunToFirstPlanet;
+            this.previousPlanet = null;
         } else {
+            this.orderNumber = previousPlanet.orderNumber + 1;
             this.distanceToSun =previousPlanet.getDistanceToSun()+ previousPlanet.distanceToNextPlanet;
+            this.previousPlanet = previousPlanet;
+            this.previousPlanet.nextPlanet = this;
         }
     }
-
-
-    public int getDistanceToNextPlanet() {
-        return distanceToNextPlanet;
+    SunSystem( int distanceToNextPlanet, int radiusOfPlanet){
+        this(distanceToNextPlanet,radiusOfPlanet, null);
     }
+
+    public int getDistanceToNextPlanet() { return distanceToNextPlanet; }
 
     public int getDistanceToSun() {
         return distanceToSun;
@@ -56,7 +55,7 @@ public enum SunSystem {
     public SunSystem getPreviousPlanet() {
         return previousPlanet;
     }
-    public String getNextPlanet() {
+    public SunSystem getNextPlanet() {
         return nextPlanet;
     }
 
